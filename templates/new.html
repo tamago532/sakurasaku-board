@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% from "_macros.html" import user_fields, image_and_key with context %}
+{% block title %}相談する - {% endblock %}
+{% block hero_lines %}
+<span class="line"><span style="--i:0">NEW</span></span>
+<span class="line"><span class="grad" style="--i:1">相談する。</span></span>
+{% endblock %}
+{% block content %}
+<a class="back" href="{{ url_for('index') }}">← cd ..</a>
+<form class="glass card form spot reveal" method="post" enctype="multipart/form-data">
+  <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+  <label>TITLE / タイトル（60文字まで）
+    <input type="text" name="title" maxlength="60" required value="{{ form.get('title', '') }}" placeholder="例：志望理由書が全然書けません">
+  </label>
+  <div class="row">
+    <label>ROUTE / 受験方式
+      <select name="route" required>
+        {% for r in routes %}<option value="{{ r }}" {% if form.get('route') == r %}selected{% endif %}>{{ r }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>FIELD / 分野
+      <select name="field" required>
+        {% for f in fields %}<option value="{{ f }}" {% if form.get('field') == f %}selected{% endif %}>{{ f }}</option>{% endfor %}
+      </select>
+    </label>
+  </div>
+  {{ user_fields(form) }}
+  <label>MESSAGE / 相談内容（2000文字まで）
+    <textarea name="body" rows="8" maxlength="2000" required placeholder="今の状況や、困っていることを書いてね">{{ form.get('body', '') }}</textarea>
+  </label>
+  {{ image_and_key() }}
+  <p class="note">電話番号・メールアドレス・SNSのIDなど、個人が分かる情報は書かないでね。</p>
+  <button class="btn btn-primary btn-block" type="submit">POST →</button>
+</form>
+{% endblock %}

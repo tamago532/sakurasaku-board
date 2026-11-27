@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}使い方 - {% endblock %}
+{% block hero_lines %}
+<span class="line"><span style="--i:0">ABOUT</span></span>
+<span class="line"><span class="grad" style="--i:1">使い方。</span></span>
+{% endblock %}
+{% block content %}
+<a class="back" href="{{ url_for('index') }}">← cd ..</a>
+<article class="glass card about spot reveal">
+  <p>進路・受験・就活の悩みを、高校生どうしや卒業した先輩に匿名で相談できる掲示板です。</p>
+
+  <h2>できること</h2>
+  <ul>
+    <li><strong>相談する</strong>：受験方式と分野を選んで投稿します。模試の結果や参考書の写真もつけられます。</li>
+    <li><strong>絞り込み</strong>：「総合型選抜 × 理系」のように、自分と同じ状況の相談だけを探せます。</li>
+    <li><strong>わかる</strong>：同じ悩みを持っていたら押してあげよう。</li>
+    <li><strong>先輩マーク</strong>：学年で「卒業生」を選ぶと「SENPAI」マークがつきます。経験談は大歓迎！</li>
+    <li><strong>解決済み</strong>：悩みが解決したら、あいことばを入れて「SOLVED」にしよう。</li>
+  </ul>
+
+  <h2>ルール</h2>
+  <ul>
+    <li>名前・学校名・電話番号・メールアドレス・SNSのIDは書かない（書くと投稿できません）。</li>
+    <li>人を傷つける言葉は使わない。</li>
+    <li>あいことばは忘れないようにメモしておく（削除や解決済みに使います）。</li>
+  </ul>
+
+  <h2>この掲示板のしくみ</h2>
+  <p>Azure App Service の上で Flask を動かしています。投稿は Azure Table Storage に、画像は Azure Blob Storage に保存しています。</p>
+</article>
+{% endblock %}

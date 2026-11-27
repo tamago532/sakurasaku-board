@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block hero_lines %}
+<span class="line"><span style="--i:0">ERROR</span></span>
+<span class="line"><span class="grad" style="--i:1">おっと。</span></span>
+{% endblock %}
+{% block content %}
+<div class="glass card reveal">
+  <p>{{ message }}</p>
+  <a class="btn" href="{{ url_for('index') }}">← 一覧にもどる</a>
+</div>
+{% endblock %}

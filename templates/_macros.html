@@ -1,0 +1,33 @@
+{% macro author(p) %}
+<span class="author">{{ p.grade }}・{{ p.nickname }}</span>
+{% if p.grade == senior_grade %}<span class="badge-senior">SENPAI</span>{% endif %}
+<span class="date">{{ p.created }}</span>
+{% endmacro %}
+
+{% macro status(t) %}
+{% if t.solved %}<span class="solved">SOLVED</span>{% else %}<span class="status">OPEN</span>{% endif %}
+{% endmacro %}
+
+{% macro user_fields(form={}) %}
+<div class="row">
+  <label>NICKNAME / ニックネーム
+    <input type="text" name="nickname" maxlength="20" placeholder="名無しの受験生" value="{{ form.get('nickname', '') }}">
+  </label>
+  <label>GRADE / 学年
+    <select name="grade" required>
+      {% for g in grades %}
+      <option value="{{ g }}" {% if form.get('grade', '高3') == g %}selected{% endif %}>{{ g }}</option>
+      {% endfor %}
+    </select>
+  </label>
+</div>
+{% endmacro %}
+
+{% macro image_and_key() %}
+<label>IMAGE / 画像（任意・5MBまで）
+  <input type="file" name="image" accept="image/jpeg,image/png,image/gif,image/webp">
+</label>
+<label>PASSPHRASE / あいことば（解決済み・削除に使う。4〜32文字）
+  <input type="password" name="key" minlength="4" maxlength="32" required autocomplete="new-password">
+</label>
+{% endmacro %}

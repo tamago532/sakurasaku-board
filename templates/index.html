@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% from "_macros.html" import author, status with context %}
+{% block body_class %}home{% endblock %}
+{% block content %}
+<a class="cta reveal magnetic" href="{{ url_for('new_thread') }}">
+  <span class="cta-text">相談する<span class="cta-sub">// 匿名・30秒で投稿</span></span>
+  <span class="cta-arrow">→</span>
+</a>
+
+<div class="section-head reveal">
+  <h2>さがす</h2>
+  <span class="ghost scramble">01 / FILTER</span>
+</div>
+
+<form class="filters glass spot reveal" method="get" action="{{ url_for('index') }}">
+  <div class="row">
+    <label>ROUTE / 受験方式
+      <select name="route">
+        <option value="">すべて</option>
+        {% for r in routes %}<option value="{{ r }}" {% if route == r %}selected{% endif %}>{{ r }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>FIELD / 分野
+      <select name="field">
+        <option value="">すべて</option>
+        {% for f in fields %}<option value="{{ f }}" {% if field == f %}selected{% endif %}>{{ f }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>SORT / 並べ替え
+      <select name="sort">
+        <option value="new" {% if sort == 'new' %}selected{% endif %}>新着順</option>
+        <option value="empathy" {% if sort == 'empathy' %}selected{% endif %}>わかる順</option>
+      </select>
+    </label>
+  </div>
+  <div class="row row-end">
+    <label class="grow">KEYWORD / キーワード
+      <input type="search" name="q" value="{{ q }}" placeholder="例：志望理由書">
+    </label>
+    <label class="check"><input type="checkbox" name="unsolved" value="1" {% if unsolved %}checked{% endif %}> 未解決だけ</label>
+    <button class="btn btn-primary magnetic" type="submit">SEARCH →</button>
+  </div>
+</form>
+
+<div class="section-head reveal">
+  <h2>みんなの相談</h2>
+  <span class="ghost scramble">02 / {{ '%03d' % threads|length }} THREADS</span>
+</div>
+
+<div class="thread-list">
+{% for t in threads %}
+<a class="thread-card glass card spot reveal" href="{{ url_for('thread', tid=t.id) }}">
+  <div class="top">
+    <span class="num">#{{ '%03d' % loop.index }}</span>
+    {{ status(t) }}
+  </div>
+  <div class="tags">
+    <span class="tag">{{ t.route }}</span>
+    <span class="tag tag-field">{{ t.field }}</span>
+  </div>
+  <h2>{{ t.title }}</h2>
+  <p class="meta">{{ author(t) }}</p>
+  <div class="bottom">
+    <p class="counts"><span>LIKE<b>{{ t.empathy }}</b></span><span>REPLY<b>{{ t.reply_count }}</b></span>{% if t.image %}<span>IMG</span>{% endif %}</p>
+    <span class="go">↗</span>
+  </div>
+</a>
+{% else %}
+<p class="empty">まだ相談がありません。最初の相談をしてみよう。</p>
+{% endfor %}
+</div>
+{% endblock %}

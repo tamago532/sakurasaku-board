@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% from "_macros.html" import author, status, user_fields, image_and_key with context %}
+{% block title %}{{ t.title }} - {% endblock %}
+{% block hero_lines %}
+<span class="line"><span style="--i:0">THREAD</span></span>
+<span class="line"><span class="grad" style="--i:1">{{ t.route }}</span></span>
+{% endblock %}
+{% block content %}
+<a class="back" href="{{ url_for('index') }}">← cd ..</a>
+
+<article class="glass card detail spot reveal">
+  <div class="top">
+    <div class="tags">
+      <span class="tag">{{ t.route }}</span>
+      <span class="tag tag-field">{{ t.field }}</span>
+    </div>
+    {{ status(t) }}
+  </div>
+  <h1>{{ t.title }}</h1>
+  <p class="meta">{{ author(t) }}</p>
+  <p class="body">{{ t.body }}</p>
+  {% if t.image %}<img class="post-image" src="{{ url_for('media', container='uploads', name=t.image) }}" alt="相談の添付画像">{% endif %}
+  <form class="empathy-form" method="post" action="{{ url_for('empathy', tid=t.id) }}">
+    <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+    <button class="btn btn-empathy magnetic {% if liked %}done{% endif %}" type="submit" {% if liked %}disabled{% endif %}>{% if liked %}✓ わかった{% else %}+ わかる{% endif %} <span class="n">{{ t.empathy }}</span></button>
+  </form>
+</article>
+
+<section id="replies">
+  <div class="section-head reveal">
+    <h2 class="replies-title">返信<span class="count">{{ '%02d' % replies|length }}</span></h2>
+    <span class="ghost scramble">REPLIES</span>
+  </div>
+  {% for r in replies %}
+  <div class="glass card reply spot reveal {% if r.grade == senior_grade %}reply-senior{% endif %}">
+    <p class="meta">{{ author(r) }}</p>
+    <p class="body">{{ r.body }}</p>
+    {% if r.image %}<img class="post-image" src="{{ url_for('media', container='uploads', name=r.image) }}" alt="返信の添付画像">{% endif %}
+    <details class="manage">
+      <summary>delete</summary>
+      <form class="inline" method="post" action="{{ url_for('delete_reply', tid=t.id, rid=r.id) }}">
+        <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+        <input type="password" name="key" placeholder="あいことば" required>
+        <button class="btn btn-danger" type="submit">削除</button>
+      </form>
+    </details>
+  </div>
+  {% else %}
+  <p class="empty">まだ返信がありません。経験や考えを教えてあげよう。</p>
+  {% endfor %}
+</section>
+
+<div class="section-head reveal">
+  <h2>返信する</h2>
+  <span class="ghost scramble">WRITE</span>
+</div>
+<form id="reply-form" class="glass card form spot reveal" method="post" action="{{ url_for('reply', tid=t.id) }}" enctype="multipart/form-data">
+  <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+  {{ user_fields() }}
+  <label>MESSAGE / 本文（2000文字まで）
+    <textarea name="body" rows="5" maxlength="2000" required></textarea>
+  </label>
+  {{ image_and_key() }}
+  <button class="btn btn-primary btn-block" type="submit">SEND REPLY →</button>
+</form>
+
+<details class="glass card manage reveal">
+  <summary>相談した人向け：解決済み・削除</summary>
+  <form class="inline" method="post">
+    <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+    <input type="password" name="key" placeholder="あいことば" required>
+    {% if not t.solved %}<button class="btn" type="submit" formaction="{{ url_for('solve', tid=t.id) }}">解決済みにする</button>{% endif %}
+    <button class="btn btn-danger" type="submit" formaction="{{ url_for('delete_thread', tid=t.id) }}">削除</button>
+  </form>
+</details>
+{% endblock %}

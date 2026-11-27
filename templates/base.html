@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% endblock %}サクラサク相談室</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+JP:wght@400;700;900&display=swap">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="{% block body_class %}sub{% endblock %}">
+  <div class="bg-grid"></div>
+  <div class="grain"></div>
+  <div class="cursor"></div>
+  <div class="cursor-ring"></div>
+  <div class="wipe"></div>
+
+  <nav class="nav">
+    <a class="logo" href="{{ url_for('index') }}" aria-label="ホーム"><span class="logo-mark"></span></a>
+    <span class="nav-sep"></span>
+    <a class="nav-link" href="{{ url_for('index') }}">/home</a>
+    <a class="nav-link" href="{{ url_for('about') }}">/about</a>
+    <a class="nav-link primary" href="{{ url_for('new_thread') }}">相談する ↗</a>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-bg">
+      <img src="{{ url_for('media', container='site', name=hero_image) }}" alt="">
+    </div>
+    <div class="hero-doc" aria-hidden="true">
+      <div class="doc-card">
+        <img src="{{ url_for('media', container='site', name=resume_image) }}" alt="">
+        <span class="doc-scan"></span>
+        <span class="doc-tag">RESUME.webp — Azure Blob</span>
+      </div>
+    </div>
+    <div class="hero-inner">
+      <p class="eyebrow"><span class="dot"></span>進路・受験・就活の匿名相談掲示板</p>
+      <h1 class="hero-title">
+        {% block hero_lines %}
+        <span class="line"><span style="--i:0">進路、受験、</span></span>
+        <span class="line"><span style="--i:1">就活の悩み。</span></span>
+        <span class="line"><span class="grad" style="--i:2">ひとりで抱えない。</span></span>
+        {% endblock %}
+      </h1>
+      <div class="hero-foot">
+        <p class="hero-lead">進路選びも、受験も、就活も。同じ状況の高校生と、経験した先輩に、名前を出さずに相談できる場所。</p>
+        {% if days_left >= 0 %}
+        <div class="countdown" data-target="{{ exam_iso }}">
+          <span class="cd-label">TIME UNTIL <br>{{ exam_name }}</span>
+          <div class="cd-seg"><span class="cd-num" data-unit="d">{{ '%03d' % days_left }}</span><span class="cd-unit">日</span></div>
+          <div class="cd-seg"><span class="cd-num" data-unit="h">00</span><span class="cd-unit">時</span></div>
+          <div class="cd-seg"><span class="cd-num" data-unit="m">00</span><span class="cd-unit">分</span></div>
+          <div class="cd-seg cd-sec"><span class="cd-num" data-unit="s">00.00</span><span class="cd-unit">秒</span></div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      {% for _ in range(2) %}<span>  <i>●</i> 進路   <i>●</i> 文理選択   <i>●</i> 一般選抜   <i>●</i> 総合型選抜   <i>●</i> 共通テスト   <i>●</i> 志望理由書   <i>●</i> 就活   <i>●</i> 履歴書   <i>●</i> 自己PR   <i>●</i> 面接   <i>●</i> 企業研究   <i>●</i> 内定 </span>{% endfor %}
+    </div>
+  </div>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="toasts">
+    {% for category, message in messages %}
+    <p class="flash {{ 'flash-error' if category == 'error' else 'flash-ok' }}">{{ message }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <p class="footer-big">TALK IT OUT.</p>
+    <div class="footer-row">
+      <span>個人情報は書かないでね。困ったときは先生や家族にも相談しよう。</span>
+      <span>© SAKURASAKU / Azure App Service</span>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='fx.js') }}" defer></script>
+</body>
+</html>
