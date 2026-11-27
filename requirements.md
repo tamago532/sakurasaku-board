@@ -118,5 +118,5 @@
 | 画像投稿 | 相談や返信に画像（JPEG・PNG・GIF・WebP、5MBまで）をつけると、Blob Storage に保存されて投稿の中に表示される | 7 |
 | 秘密情報の管理 | ストレージには Managed Identity で接続し、接続文字列やキーを使わない。GitHub からの自動公開も Azure が発行する一時的な認証を使うため、リポジトリに秘密情報は入らない。あいことばはハッシュ化して保存する | 4・6 |
 
-サイトのURL：
-GitHubリポジトリのURL：
+サイトのURL：https://sakurasaku-283.azurewebsites.net
+GitHubリポジトリのURL：https://github.com/tamago532/sakurasaku-board

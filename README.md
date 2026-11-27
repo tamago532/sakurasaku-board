@@ -2,7 +2,7 @@
 
 高校生向けの、進路・受験・就活の匿名相談掲示板です。
 
-- サイト：（公開後に記入）
+- サイト：https://sakurasaku-283.azurewebsites.net
 - 要件定義：[requirements.md](requirements.md)
 
 ## 主な機能
